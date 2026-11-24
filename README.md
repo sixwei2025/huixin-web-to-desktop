@@ -52,6 +52,8 @@ https://github.com/sixwei2025/huixin-web-to-desktop
 
 市面上已有优秀的开源项目 [Pake](https://github.com/tw93/Pake)（在此向 Pake 的设计灵感致敬），但在 **AI 编程（Vibe Coding）时代**，普通用户和一人公司创作者在把网页工具变成桌面端 App 时，依然有 4 个高频痛点：
 
+<img src="assets/showcase/size-benchmark.jpg" width="100%" alt="实测体积对比：0.51MB vs 8MB vs 120MB" />
+
 | 对比维度 | 传统命令行打包工具（如 Pake） | 汇芯网页转桌面（`huixin-web-to-desktop`） |
 | :--- | :--- | :--- |
 | **使用门槛** | 纯命令行，本机通常需安装 Rust / Cargo / Xcode 工具链，首次编译耗时长、非程序员易劝退 | **可视化桌面端 APP + CLI + AI Skill 三位一体**：点鼠标填网址/选目录，2–5 秒直接出 `.app` 与 `.dmg` |
@@ -61,9 +63,17 @@ https://github.com/sixwei2025/huixin-web-to-desktop
 
 ---
 
-## 二、可视化桌面端 & 一句话快速开始
+## 二、动态演示与可视化桌面端
 
-### 1. 可视化桌面端工作台实拍（自举打包，整包仅 1.67 MB）
+### 1. 一键 2 秒出包动态演示（GIF 实录）
+
+<img src="assets/showcase/demo.gif" width="100%" alt="汇芯网页转桌面动态演示 GIF" />
+
+### 2. 双模式通吃：在线网址 + 本地全栈项目
+
+<img src="assets/showcase/dual-mode-comparison.jpg" width="100%" alt="在线网址与本地全栈项目双模式对比" />
+
+### 3. 可视化桌面端工作台实拍（自举打包，整包仅 1.67 MB）
 
 <img src="assets/showcase/gui-preview.png" width="100%" alt="汇芯网页转桌面可视化界面" />
 
