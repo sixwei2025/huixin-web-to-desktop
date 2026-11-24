@@ -1,0 +1,36 @@
+{
+  "name": "huixin-web-to-desktop",
+  "version": "1.0.0",
+  "description": "汇芯网页转桌面 — 一键将任意在线网页或本地网页/全栈项目打包成轻量独立桌面端 App（原生 WKWebView 极速轻量引擎 + Electron 全能跨平台引擎，可视化桌面端 + CLI + AI Skill 三位一体）",
+  "type": "module",
+  "bin": {
+    "hxweb2app": "./bin/hxweb2app.mjs",
+    "web2desktop": "./bin/hxweb2app.mjs"
+  },
+  "scripts": {
+    "build:shell": "bash templates/native-macos/build_shell.sh",
+    "gui": "node gui/server.mjs",
+    "build:app": "node gui/build-studio-app.mjs",
+    "verify": "node scripts/verify_self.mjs"
+  },
+  "keywords": [
+    "web-to-desktop",
+    "web2app",
+    "pake-alternative",
+    "macos-app",
+    "wkwebview",
+    "electron",
+    "desktop-packer",
+    "ai-skill",
+    "huixin"
+  ],
+  "author": "袁六伟 · 台州汇芯 (https://github.com/sixwei2025)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sixwei2025/huixin-web-to-desktop.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

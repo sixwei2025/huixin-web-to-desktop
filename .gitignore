@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+dist/
+out/
+.tmp/
+*.dmg
+*.app/
+!templates/native-macos/WebShell.bin

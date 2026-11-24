@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>汇芯网页转桌面 · Huixin Web to Desktop</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo">汇</div>
+        <div>
+          <div class="brand-title">汇芯网页转桌面 <span class="badge">v1.0.0 · MIT 开源</span></div>
+          <div class="brand-sub">任意在线网址或本地网页/全栈项目，一键打包成轻量独立桌面端 App</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="btnOpenOutDir" class="btn-ghost" type="button">打开输出目录</button>
+        <a class="btn-ghost" href="https://github.com/sixwei2025/huixin-web-to-desktop" target="_blank">GitHub 开源</a>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <!-- Left: Config Form -->
+      <section class="panel form-panel">
+        <div class="section-label">快捷体验 · 热门网址一键填充</div>
+        <div id="presetsGrid" class="presets-grid"></div>
+
+        <div class="divider"></div>
+
+        <div class="row-2">
+          <div>
+            <label class="field-label">1. 选择打包模式</label>
+            <div class="segmented" id="modeSegment">
+              <button type="button" data-val="url" class="active">在线网址 → App</button>
+              <button type="button" data-val="local">本地项目 → App</button>
+            </div>
+          </div>
+          <div>
+            <label class="field-label">2. 选择底层引擎</label>
+            <div class="segmented" id="engineSegment">
+              <button type="button" data-val="native" class="active">原生极速 (~1MB)</button>
+              <button type="button" data-val="electron">Electron 跨平台</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- URL Mode Input -->
+        <div id="urlGroup" class="field-group">
+          <label class="field-label" for="inputUrl">目标网址 URL</label>
+          <input id="inputUrl" type="url" placeholder="https://chat.deepseek.com" autocomplete="off" />
+        </div>
+
+        <!-- Local Project Mode Input -->
+        <div id="localGroup" class="field-group hidden">
+          <label class="field-label" for="inputLocalDir">本地网页 / 全栈项目目录</label>
+          <div class="input-with-btn">
+            <input id="inputLocalDir" type="text" placeholder="/path/to/my-web-project" />
+            <button id="btnPickFolder" class="btn-secondary" type="button">选择文件夹</button>
+          </div>
+          <div id="detectBanner" class="detect-banner hidden"></div>
+          <div class="row-2 mt-10">
+            <div>
+              <label class="field-label" for="inputStartCmd">启动命令（静态 HTML 留空即可）</label>
+              <input id="inputStartCmd" type="text" placeholder="如 node server.js 或 python3 app.py" />
+            </div>
+            <div>
+              <label class="field-label" for="inputHealthPath">首页路径</label>
+              <input id="inputHealthPath" type="text" value="/" placeholder="/" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row-2 field-group">
+          <div>
+            <label class="field-label" for="inputName">应用名称</label>
+            <input id="inputName" type="text" placeholder="如 DeepSeek、我的工作台" />
+          </div>
+          <div>
+            <label class="field-label">应用图标（留空自动抓取或生成）</label>
+            <div class="icon-picker">
+              <input id="inputIconPath" type="text" placeholder="自动抓取网站图标 / 生成首字图标" />
+              <button id="btnPickIcon" class="btn-secondary" type="button">选图</button>
+              <input id="fileIconUpload" type="file" accept="image/png,image/jpeg,image/webp" class="hidden" />
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="inputOutDir">输出目录</label>
+          <input id="inputOutDir" type="text" />
+        </div>
+
+        <details class="advanced-box">
+          <summary>窗口外观、托盘与高级定制（可选）</summary>
+          <div class="advanced-body">
+            <div class="row-2">
+              <div>
+                <label class="field-label" for="inputWidth">窗口宽度 (px)</label>
+                <input id="inputWidth" type="number" value="1280" min="400" max="3840" />
+              </div>
+              <div>
+                <label class="field-label" for="inputHeight">窗口高度 (px)</label>
+                <input id="inputHeight" type="number" value="840" min="320" max="2160" />
+              </div>
+            </div>
+            <div class="checks-grid">
+              <label class="check-item"><input id="chkHideTitlebar" type="checkbox" /> 沉浸式隐藏标题栏</label>
+              <label class="check-item"><input id="chkTray" type="checkbox" /> 菜单栏托盘驻留</label>
+              <label class="check-item"><input id="chkAlwaysOnTop" type="checkbox" /> 窗口始终置顶</label>
+              <label class="check-item"><input id="chkDmg" type="checkbox" checked /> 同时生成 .dmg 安装包</label>
+              <label class="check-item"><input id="chkInstall" type="checkbox" /> 直接安装到「应用程序」</label>
+            </div>
+            <div class="mt-10">
+              <label class="field-label" for="inputCSS">自定义注入 CSS（去广告 / 隐藏网页导航栏）</label>
+              <textarea id="inputCSS" rows="2" placeholder="例如: header, .ad-banner { display: none !important; }"></textarea>
+            </div>
+          </div>
+        </details>
+
+        <button id="btnPack" class="btn-primary" type="button">
+          <span id="btnPackText">一键生成桌面端 App</span>
+        </button>
+      </section>
+
+      <!-- Right: Live Preview + Output + History -->
+      <section class="right-col">
+        <div class="panel preview-panel">
+          <div class="section-label">桌面窗口实时预览</div>
+          <div class="mac-window" id="previewWindow">
+            <div class="mac-titlebar" id="previewTitlebar">
+              <div class="traffic-lights">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              </div>
+              <div class="mac-title" id="previewTitle">DeepSeek</div>
+              <div class="mac-tag" id="previewEngineTag">原生 ~1MB</div>
+            </div>
+            <div class="mac-body">
+              <div class="preview-app-icon" id="previewIcon">D</div>
+              <div class="preview-meta">
+                <div class="preview-name" id="previewNameBig">DeepSeek.app</div>
+                <div class="preview-target" id="previewTarget">https://chat.deepseek.com</div>
+                <div class="preview-chips" id="previewChips"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="resultBox" class="result-box hidden"></div>
+          <pre id="logBox" class="log-box hidden"></pre>
+        </div>
+
+        <div class="panel history-panel">
+          <div class="history-head">
+            <div class="section-label" style="margin:0;">已打包应用库</div>
+            <span id="historyCount" class="muted">0 个</span>
+          </div>
+          <div id="historyList" class="history-list">
+            <div class="empty-tip">还没有打包记录，点击左侧「一键生成桌面端 App」试试吧！</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>出品：<strong>袁六伟 · 台州汇芯</strong>（公众号 / 视频号：袁六伟）</span>
+      <span>MIT 免费开源 · 零 Rust / Xcode 编译依赖 · 支持在线网址与本地全栈项目</span>
+    </footer>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
